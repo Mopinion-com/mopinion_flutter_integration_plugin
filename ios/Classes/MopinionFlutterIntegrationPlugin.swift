@@ -3,7 +3,19 @@ import UIKit
 import MopinionSDK
 
 public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
-  private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+    
+    private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+    
+    // statics for the Flutter message communication
+    private weak static var controller : FlutterViewController?
+    
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
+        let instance = MopinionFlutterIntegrationPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
+    }
+    
 
     private struct MopinionFlutterIntegrationPluginError {
         let code : String
@@ -33,9 +45,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
         case VALUE = "value"
     }
 
-    // statics for the Flutter message communication
-    private weak static var controller : FlutterViewController?
-    private weak static var channel : FlutterMethodChannel?
+    
     
     // MARK: singleton
     private override init() {}  // singleton
@@ -45,38 +55,32 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
     // MARK: Flutter method handler
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
-    func mopinionSdkBind() {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController else {
             MopinionFlutterIntegrationPlugin.controller = nil
             return
         }
-        MopinionFlutterIntegrationPlugin.controller = controller
-        let channel = FlutterMethodChannel(name: METHOD_CHANNEL_NAME, binaryMessenger: controller.binaryMessenger)
-        MopinionFlutterIntegrationPlugin.channel = channel
-        
-        channel.setMethodCallHandler({
-            [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            switch call.method {
-            case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
-                self?.initializeSdk(call: call, result: result)
-                break
-            case MopinionFlutterAction.TRIGGER_EVENT.rawValue:
-                self?.triggerEvent(controller:controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.ADD_META_DATA.rawValue:
-                self?.addMetaData(controller: controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.REMOVE_META_DATA.rawValue:
-                self?.removeMetadataWithKey(controller: controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
-                self?.removeAllMetadata()
-                break
-            default:
-                break
-            }
-        })
+        switch call.method {
+        case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
+            initializeSdk(call: call, result: result)
+            break
+        case MopinionFlutterAction.TRIGGER_EVENT.rawValue:
+            triggerEvent(controller:controller, call: call, result: result)
+            break
+        case MopinionFlutterAction.ADD_META_DATA.rawValue:
+            addMetaData(controller: controller, call: call, result: result)
+            break
+        case MopinionFlutterAction.REMOVE_META_DATA.rawValue:
+            self.removeMetadataWithKey(controller: controller, call: call, result: result)
+            break
+        case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
+            removeAllMetadata()
+            break
+        default:
+            break
+        }
     }
+
     
     // MARK: implementation of the Flutter methods
 
