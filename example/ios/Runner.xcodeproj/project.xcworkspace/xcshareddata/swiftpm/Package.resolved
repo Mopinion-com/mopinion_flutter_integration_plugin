@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "mopinion-sdk-ios-swiftpm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mopinion-com/mopinion-sdk-ios-swiftpm",
+      "state" : {
+        "revision" : "f349dc37b9b1971d00d94da7bd60e5085e8f8124",
+        "version" : "1.0.2"
+      }
+    }
+  ],
+  "version" : 2
+}
