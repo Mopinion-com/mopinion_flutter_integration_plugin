@@ -1,63 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
+
 import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _mopinionFlutterIntegrationPlugin = MopinionFlutterIntegrationPlugin();
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
+  String _state = "no state";
+
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    initialize();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
+  Future<void> initialize() async {
     try {
-      platformVersion =
-          await _mopinionFlutterIntegrationPlugin.getPlatformVersion() ?? 'Unknown platform version';
+       MopinionFlutterIntegrationPlugin.initSdk("zdF2CDO4NZ523sDqdzDDgzKaMb7zbsdzIuQPxUBk", true);
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+      print("error");
+    } 
+  }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
+  Future<void> _launchEvent(String eventName) async {
     setState(() {
-      _platformVersion = platformVersion;
+      Map<String, String> map = {
+        "age": "29",
+        "name": "Manuel"
+      };
+      MopinionFlutterIntegrationPlugin.data(map);
+      MopinionFlutterIntegrationPlugin.removeAllMetaData();
+      MopinionFlutterIntegrationPlugin.event(eventName).then((value) {
+        _state = value;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("test"),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Counter',
+            ),
+            Text(
+              _state,
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _launchEvent("bug1");
+          
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
