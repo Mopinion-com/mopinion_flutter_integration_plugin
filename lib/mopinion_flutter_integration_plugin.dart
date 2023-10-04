@@ -24,6 +24,12 @@ class MopinionFlutterIntegrationPlugin {
     });
   }
 
+  static Future<Stream> eventsData() async {
+    Stream stream;
+    stream = events.receiveBroadcastStream();
+    return stream;
+  }
+
   static Future<void> data(Map<String, String> map) async {
     map.forEach((key, value) {
       platform.invokeMethod(addMetaDataAction, {

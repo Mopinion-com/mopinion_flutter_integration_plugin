@@ -1,14 +1,17 @@
 package com.mopinion.mopinion_flutter_integration_plugin
 
 
+import android.app.Activity
 import android.util.Log
-import androidx.fragment.app.FragmentActivity
 import com.mopinion.mopinion_android_sdk.ui.mopinion.Mopinion
+import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.CHANNEL
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.DEPLOYMENT_KEY
+import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.EVENT_CHANNEL_NAME
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.FIRST_ARGUMENT
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.KEY
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.LOG
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.VALUE
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -20,22 +23,21 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.view.TextureRegistry
 
 /** MopinionFlutterIntegrationPlugin */
-class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, ActivityAware  {
+class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler  {
 
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
   private lateinit var channel: MethodChannel
   private lateinit var registry: TextureRegistry
-  private lateinit var activity: FragmentActivity
+  private lateinit var activity: Activity
   private lateinit var mopinion: Mopinion
+  private lateinit var eventChannel: EventChannel
+
+  private var eventSink: EventChannel.EventSink? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "mopinion_flutter_integration_plugin")
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL)
     channel.setMethodCallHandler(this)
-
+    eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, EVENT_CHANNEL_NAME)
+    eventChannel.setStreamHandler(this)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -45,7 +47,6 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    var counter = 0
     when(MopinionActions.map[call.method]) {
       MopinionActions.InitialiseSDK -> {
         val deploymentKey = call.argument(DEPLOYMENT_KEY) as String? ?: return
@@ -58,13 +59,10 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
       }
       MopinionActions.TriggerEvent -> {
         val eventName = call.argument(FIRST_ARGUMENT) as String? ?: return
-        mopinion = Mopinion(activity, activity)
+        mopinion = Mopinion(activity as FlutterFragmentActivity, activity as FlutterFragmentActivity)
         mopinion.event(eventName) {
-          if (counter == 0) {
-            Log.d("FlutterFragmentActivity", it::class.java.simpleName)
-            result.success(it::class.java.simpleName)
-            counter ++
-          }
+          Log.d("FlutterFragmentActivity", it::class.java.simpleName)
+          eventSink?.success(it::class.java.simpleName)
         }
       }
       MopinionActions.AddMetaData -> {
@@ -75,18 +73,22 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
         }
       }
       MopinionActions.RemoveAllMetaData -> {
-        mopinion.removeData()
+        if (::mopinion.isInitialized) {
+          mopinion.removeData()
+        }
       }
       MopinionActions.RemoveMetaData -> {
-        val key = call.argument(KEY) as String? ?: return
-        mopinion.removeData(key)
+        if (::mopinion.isInitialized) {
+          val key = call.argument(KEY) as String? ?: return
+          mopinion.removeData(key)
+        }
       }
       null -> {}
     }
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    activity = binding.activity as FragmentActivity
+    activity = binding.activity
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -94,10 +96,18 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    activity = binding.activity as FragmentActivity
+    activity = binding.activity
   }
 
   override fun onDetachedFromActivity() {
+
+  }
+
+  override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+      eventSink = events
+  }
+
+  override fun onCancel(arguments: Any?) {
 
   }
 }

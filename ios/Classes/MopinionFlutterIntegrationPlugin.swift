@@ -3,40 +3,20 @@ import UIKit
 import MopinionSDK
 
 public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
-  private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
-
-    private struct MopinionFlutterIntegrationPluginError {
-        let code : String
-        let message : String
-        
-        init(code: String, message: String) {
-            self.code = code        // short keywword like errornumber or alphanumeric classification
-            self.message = message  // brief human readable description of the error classication
-        }
+    
+private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+    
+    // statics for the Flutter message communication
+    private weak static var controller : FlutterViewController?
+    
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
+        let instance = MopinionFlutterIntegrationPlugin()
+        registrar.addMethodCallDelegate(instance, channel: channel)
     }
     
     private let invalidArgError = MopinionFlutterIntegrationPluginError(code:"invalidArgs", message: "Invalid arguments.")
-    
-    private enum MopinionFlutterAction: String {
-        case INIT_WITH_DEPLOYMENT = "init_sdk"
-        case ADD_META_DATA = "add_meta_data"
-        case REMOVE_META_DATA = "remove_meta_data"
-        case REMOVE_ALL_META_DATA = "remove_all_meta_data"
-        case TRIGGER_EVENT = "trigger_event"
-    }
-
-    private enum MopinionFlutterArgument: String {
-        case DEPLOYMENT_KEY = "deployment_key"
-        case FIRST_ARGUMENT = "argument1"
-        case KEY = "key"
-        case LOG = "log"
-        case VALUE = "value"
-    }
-
-    // statics for the Flutter message communication
-    private weak static var controller : FlutterViewController?
-    private weak static var channel : FlutterMethodChannel?
-    
+        
     // MARK: singleton
     private override init() {}  // singleton
     
@@ -45,39 +25,33 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
     // MARK: Flutter method handler
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
-    func mopinionSdkBind() {
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController else {
             MopinionFlutterIntegrationPlugin.controller = nil
             return
         }
-        MopinionFlutterIntegrationPlugin.controller = controller
-        let channel = FlutterMethodChannel(name: METHOD_CHANNEL_NAME, binaryMessenger: controller.binaryMessenger)
-        MopinionFlutterIntegrationPlugin.channel = channel
-        
-        channel.setMethodCallHandler({
-            [weak self] (call: FlutterMethodCall, result: FlutterResult) -> Void in
-            switch call.method {
+                    switch call.method {
             case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
-                self?.initializeSdk(call: call, result: result)
+                initializeSdk(call: call, result: result)
                 break
             case MopinionFlutterAction.TRIGGER_EVENT.rawValue:
-                self?.triggerEvent(controller:controller, call: call, result: result)
+                triggerEvent(controller:controller, call: call, result: result)
                 break
             case MopinionFlutterAction.ADD_META_DATA.rawValue:
-                self?.addMetaData(controller: controller, call: call, result: result)
+                addMetaData(controller: controller, call: call, result: result)
                 break
             case MopinionFlutterAction.REMOVE_META_DATA.rawValue:
-                self?.removeMetadataWithKey(controller: controller, call: call, result: result)
+                self.removeMetadataWithKey(controller: controller, call: call, result: result)
                 break
             case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
-                self?.removeAllMetadata()
+                removeAllMetadata()
                 break
             default:
                 break
             }
-        })
-    }
+            }
     
+
     // MARK: implementation of the Flutter methods
 
     private func initializeSdk(call: FlutterMethodCall, result: FlutterResult) {
@@ -124,5 +98,31 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
 
     private func removeAllMetadata() {
         MopinionSDK.removeData()
+    }
+
+    private struct MopinionFlutterIntegrationPluginError {
+        let code : String
+        let message : String
+        
+        init(code: String, message: String) {
+            self.code = code        // short keywword like errornumber or alphanumeric classification
+            self.message = message  // brief human readable description of the error classication
+        }
+    }
+    
+    private enum MopinionFlutterAction: String {
+        case INIT_WITH_DEPLOYMENT = "init_sdk"
+        case ADD_META_DATA = "add_meta_data"
+        case REMOVE_META_DATA = "remove_meta_data"
+        case REMOVE_ALL_META_DATA = "remove_all_meta_data"
+        case TRIGGER_EVENT = "trigger_event"
+    }
+
+    private enum MopinionFlutterArgument: String {
+        case DEPLOYMENT_KEY = "deployment_key"
+        case FIRST_ARGUMENT = "argument1"
+        case KEY = "key"
+        case LOG = "log"
+        case VALUE = "value"
     }
 }
