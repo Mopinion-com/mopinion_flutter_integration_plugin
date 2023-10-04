@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initialize() async {
     try {
        MopinionFlutterIntegrationPlugin.initSdk("zdF2CDO4NZ523sDqdzDDgzKaMb7zbsdzIuQPxUBk", true);
+       events();
     } on PlatformException {
       print("error");
     } 
@@ -55,21 +56,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _launchEvent(String eventName) async {
     setState(() {
-      Map<String, String> map = {
-        "age": "29",
-        "name": "Manuel"
-      };
-      MopinionFlutterIntegrationPlugin.data(map);
-      MopinionFlutterIntegrationPlugin.removeAllMetaData();
-      MopinionFlutterIntegrationPlugin.event(eventName).then((value) {
-        _state = value;
-      });
+      
+      MopinionFlutterIntegrationPlugin.event(eventName);
     });
+  }
+
+  void _setTextEventName(event) {
+    setState(() => _state = event);
+  }
+
+  Future<void> events() async {
+    Stream stream;
+    try {
+      stream = await MopinionFlutterIntegrationPlugin.eventsData();
+      stream.listen(_setTextEventName, onError: _onError);
+    } on PlatformException {
+      print("Failed to get events stream.");
+    }
+  }
+
+  static void _onError(error) {
+    print("Error info: $error");
   }
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
       appBar: AppBar(
