@@ -108,6 +108,6 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
   }
 
   override fun onCancel(arguments: Any?) {
-
+      eventSink = null
   }
 }
