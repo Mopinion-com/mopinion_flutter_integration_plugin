@@ -1,7 +1,7 @@
 # Mopinion Native SDK for Flutter 
 
 This Flutter Integration SDK contains code to help you use our Android and/or iOS Native/Web SDKs from Flutter.
-Tested with Flutter 3.13.4, Dart 3.1.2, DevTools 2.25.0, Xcode 15.0.
+
 
 ## Installation
 1. Edit the `pubspec.yml` in your `flutter` directory to define the Mopinion Plugin Dependency:
@@ -20,13 +20,7 @@ dependencies:
     flutter pub get
 ```
 
-## Setting up
-
-Now you can import the Mopinion SDK
-
-```dart
-    import 'package: mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart'
-```
+## Native set up
 
 ### Android
 
@@ -53,3 +47,96 @@ Install the Mopinion SDK for iOS to make it an available resource for the Flutte
 The run the Flutter App. Incase of a failure regarding Pods than fetching the the latest Mopinion SDK for iOS, it can be solved by updating the Pod. This can be achieved running the following command:
 
 ```pod --repo-update install```
+
+## Flutter implementation
+In order to use Mopinion SDK for Flutter and start collecting your valuable user's feedback please follow the following steps:
+
+### Import the plugin
+
+Import the plugin class
+
+```dart
+import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
+```
+
+### Initialise the SDK
+Initialise the SDK by calling:
+```dart
+MopinionFlutterIntegrationPlugin.initSdk("YOUR_KEY", log: true);
+```
+The parameter `log` allows to activate the logging in the SDK.
+It's recommended to initialise the SDK the earliest possible, an example of where to initialise the SDK:
+
+```dart
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    try {
+       MopinionFlutterIntegrationPlugin.initSdk(YOUR_KEY, true);
+    } on PlatformException {
+      print("error");
+    } 
+  }
+```
+
+### Calling events
+In order to show your forms, call the function :
+```dart
+MopinionFlutterIntegrationPlugin.event(EVENT_NAME)
+```
+
+The `MopinionFlutterIntegrationPlugin.event(EVENT_NAME)` function will also stream an Form State to show in which state the form is. To be able to listen to that callback you can call the function `MopinionFlutterIntegrationPlugin.eventsData()` which returns an `Stream`. Example of usage:
+
+```dart
+    Stream stream;
+    try {
+      stream = await MopinionFlutterIntegrationPlugin.eventsData();
+      stream.listen(_setTextEventName, onError: _onError);
+    } on PlatformException {
+      print("Failed to get events stream.");
+    }
+
+    void _setTextEventName(event) {
+    setState(() => _yourState_ = event);
+  }
+```
+
+## Adding Metadata
+
+Adding Metadata in the Mopinion SDK is easy, it's achieved by calling the function
+
+```dart
+  MopinionFlutterIntegrationPlugin.data(Map);
+```
+
+This function will receive a `Map<String, String>` variable which will contain the metadata you want to set in your events. Example of usage:
+
+```dart
+  Map<String, String> map = {
+        "age": "29",
+        "name": "Manuel"
+      };
+  MopinionFlutterIntegrationPlugin.data(map);
+  MopinionFlutterIntegrationPlugin.event(yourEvent);
+```
+
+#### Deleting Metadata by key
+When a key data from the Metadata `Map<String, String>` provided to the SDK wants to be deleted then we should just pass the `key` value as the following:
+
+```dart
+  MopinionFlutterIntegrationPlugin.removeMetaData("name");
+```
+
+This will remove the key `name` from the Metadata `Map` provided.
+
+#### Deleting all Metadata
+When all Metadata wants to be deleted, it's even simplier, just call 
+
+```dart
+MopinionFlutterIntegrationPlugin.removeAllMetaData();
+```
+And all Metadata will be deleted.
