@@ -86,7 +86,7 @@ It's recommended to initialise the SDK the earliest possible, an example of wher
 ### Calling events
 In order to show your forms, call the function :
 ```dart
-MopinionFlutterIntegrationPlugin.event(EVENT_NAME)
+MopinionFlutterIntegrationPlugin.event(EVENT_NAME);
 ```
 
 The `MopinionFlutterIntegrationPlugin.event(EVENT_NAME)` function will also stream an Form State to show in which state the form is. To be able to listen to that callback you can call the function `MopinionFlutterIntegrationPlugin.eventsData()` which returns an `Stream`. Example of usage:
@@ -105,7 +105,22 @@ The `MopinionFlutterIntegrationPlugin.event(EVENT_NAME)` function will also stre
   }
 ```
 
-## Adding Metadata
+The Form State callback will be a `String`, and these are the possible Form States:
+
+* Loading
+* FormOpened
+* FormSent
+* FormCanceled
+* FormClosed
+* Error
+* HasNotBeenShown
+
+More information about the Form States can be found in each readme of the Native SDKs:
+
+[iOS: 2.4.2 Callback variants of the event method](https://github.com/Mopinion-com/mopinion-sdk-ios#242-callback-variants-of-the-event-method)
+[Android: Implementing Form State callbacks](https://github.com/Mopinion-com/mopinion-sdk-android#implementing-formstate-callbacks)
+
+### Adding Metadata
 
 Adding Metadata in the Mopinion SDK is easy, it's achieved by calling the function
 
@@ -140,3 +155,5 @@ When all Metadata wants to be deleted, it's even simplier, just call
 MopinionFlutterIntegrationPlugin.removeAllMetaData();
 ```
 And all Metadata will be deleted.
+
+
