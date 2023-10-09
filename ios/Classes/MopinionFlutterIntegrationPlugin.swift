@@ -80,13 +80,13 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
             guard let eventSink = self.eventSink else { return }
             switch mopinionEvent {
             case .FORM_CLOSED:
-                eventSink("form_closed")
+                eventSink("FormClosed")
             case .FORM_OPEN:
-                eventSink("form_open")
+                eventSink("FormOpened")
             case .FORM_SENT:
-                eventSink("form_sent")
+                eventSink("FormSent")
             case .NO_FORM_WILL_OPEN:
-                eventSink("form_will_open")
+                eventSink("HasNotBeenShown")
             @unknown default:
                 break
             }
