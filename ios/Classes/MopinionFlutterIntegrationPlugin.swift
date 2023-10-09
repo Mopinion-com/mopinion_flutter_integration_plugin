@@ -2,17 +2,21 @@ import Flutter
 import UIKit
 import MopinionSDK
 
-public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin {
+public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
-private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+    private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
     
     // statics for the Flutter message communication
     private weak static var controller : FlutterViewController?
+    
+    private var eventSink: FlutterEventSink? = nil
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
         let instance = MopinionFlutterIntegrationPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        let eventChannel = FlutterEventChannel(name: "MopinionFlutterBridge/native/events", binaryMessenger: registrar.messenger())
+        eventChannel.setStreamHandler(instance)
     }
     
     private let invalidArgError = MopinionFlutterIntegrationPluginError(code:"invalidArgs", message: "Invalid arguments.")
@@ -72,7 +76,25 @@ private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter c
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.DEPLOYMENT_KEY.rawValue)", details: "Expected event name as String"))
             return
         }
-        MopinionSDK.event(controller, eventName)
+        MopinionSDK.event(controller, eventName, onCallbackEvent: { mopinionEvent,response in
+            guard let eventSink = self.eventSink else { return }
+            switch mopinionEvent {
+            case .FORM_CLOSED:
+                eventSink("form_closed")
+            case .FORM_OPEN:
+                eventSink("form_open")
+            case .FORM_SENT:
+                eventSink("form_sent")
+            case .NO_FORM_WILL_OPEN:
+                eventSink("form_will_open")
+            @unknown default:
+                break
+            }
+        }, onCallbackEventError: { mopinionEvent,response in
+            if let error = response.getError() {
+                print("FlutterPLugin -> Error in \(self): callback event error failure.")
+            }
+        })
         result(nil)
     }
 
@@ -98,6 +120,16 @@ private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter c
 
     private func removeAllMetadata() {
         MopinionSDK.removeData()
+    }
+    
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        self.eventSink = events
+        return nil
+    }
+    
+    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        self.eventSink = nil
+        return nil
     }
 
     private struct MopinionFlutterIntegrationPluginError {
