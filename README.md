@@ -39,3 +39,17 @@ Now you can import the Mopinion SDK
    ```
 
    3. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme](https://github.com/Mopinion-com/mopinion-sdk-android), step 4 for more info. 
+
+### iOS
+Install the Mopinion SDK for iOS to make it an available resource for the Flutter plugin.
+
+1. Open your iOS project Runner.xcodeproj with Xcode.
+2. Set the iOS Deployment Target to 9.0 or above.
+3. Uncomment or add platform :ios, '9.0' to the podfile.
+   ```
+   # Uncomment this line to define a global platform for your project
+    platform :ios, '9.0'
+   ```
+The run the Flutter App. Incase of a failure regarding Pods than fetching the the latest Mopinion SDK for iOS, it can be solved by updating the Pod. This can be achieved running the following command:
+
+```pod --repo-update install```
