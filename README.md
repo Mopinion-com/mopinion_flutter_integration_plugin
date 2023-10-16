@@ -24,29 +24,62 @@ dependencies:
 
 ### Android
 
-   1. Make sure that your MainActivity extends FlutterFragmentActivity
-   2. Make sure the min sdk is 21 in your app's `build.gradle`:
-   ```
+   1. Open the Android project with Android Studio.
+   2. Make sure that your `MainActivity.kt` extends `FlutterFragmentActivity` and the `FlutterEngine` is registered as the following:
+      ```kotlin
+      import io.flutter.embedding.android.FlutterFragmentActivity
+      import io.flutter.embedding.engine.FlutterEngine
+      import io.flutter.plugins.GeneratedPluginRegistrant
+
+      class MainActivity: FlutterFragmentActivity() {
+        override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+          GeneratedPluginRegistrant.registerWith(flutterEngine)
+        }
+      }
+      ```
+   3. Make sure the min sdk is 21 in your `app` `build.gradle`:
+   ```groovy
      defaultConfig {
         minSdkVersion 21
     }
    ```
-
-   3. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme](https://github.com/Mopinion-com/mopinion-sdk-android), step 4 for more info. 
+   4. In your `Project` `build.gradle` include the Jitpack repoistory:
+      ```groovy
+      maven {
+        url 'https://www.jitpack.io'
+      }
+      ```
+  5. Sync gradle.
+  6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme](https://github.com/Mopinion-com/mopinion-sdk-android), step 4 for more info. 
+    
 
 ### iOS
 Install the Mopinion SDK for iOS to make it an available resource for the Flutter plugin.
 
-1. Open your iOS project Runner.xcodeproj with Xcode.
-2. Set the iOS Deployment Target to 9.0 or above.
-3. Uncomment or add platform :ios, '9.0' to the podfile.
+1. Open in the terminal the `ios` folder and run `pod install` command.
+2. Open your iOS project `Runner.xcworkspace` with Xcode.
+3. Click on the `Pods` project.
+4. Click on `File` option from XCode and click on `Add Package dependencies...`.
+5. Search for the Mopinion iOS SDK:
+   `https://github.com/Mopinion-com/mopinion-sdk-ios-swiftpm.git`
+   It will appear with the name of: `mopinion-sdk-ios-swiftpm`.
+6. Remember to add it to the `Pods` project.
+7. When the dialog of `Choose Package Products for mopinion-sdk-ios-swiftpm` is opened, select the `Add to Target` dropdown and from the options select the plugin target: `mopinion_flutter_integration_plugin`.
+8. Add the package.
+9. Add `Privacy - Camera Usage Description` and `Privacy - Photo Library Usage Description` into file `info.plist`.
+   ```xml
+      <key>NSCameraUsageDescription</key>
+	  <string>TEXT_FOR_END_USER</string>
+	  <key>NSPhotoLibraryUsageDescription</key>
+	  <string>TEXT_FOR_END_USER</string>
+   ```
+10. Using `VSCode`, in the folder `ios`, open the file `Podfile` and set the iOS Deployment Target to 11.0 or above.
+   Uncomment or add platform :ios, '11.0' to the podfile.
    ```
    # Uncomment this line to define a global platform for your project
-    platform :ios, '9.0'
+    platform :ios, '11.0'
    ```
-The run the Flutter App. Incase of a failure regarding Pods than fetching the the latest Mopinion SDK for iOS, it can be solved by updating the Pod. This can be achieved running the following command:
-
-```pod --repo-update install```
+11. Finally run the project from XCode.
 
 ## Flutter implementation
 In order to use Mopinion SDK for Flutter and start collecting your valuable user's feedback please follow the following steps:
