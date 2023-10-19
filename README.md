@@ -95,9 +95,9 @@ import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration
 ### Initialise the SDK
 Initialise the SDK by calling:
 ```dart
-MopinionFlutterIntegrationPlugin.initSdk("YOUR_KEY", log: true);
+MopinionFlutterIntegrationPlugin.initSdk("YOUR_KEY", true);
 ```
-The parameter `log` allows to activate the logging in the SDK.
+The parameter `log` which is the `boolean` after the key, allows to activate the logging in the SDK.
 It's recommended to initialise the SDK the earliest possible, an example of where to initialise the SDK:
 
 ```dart
