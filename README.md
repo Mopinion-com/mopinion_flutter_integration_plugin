@@ -43,14 +43,14 @@ dependencies:
         minSdkVersion 21
     }
    ```
-   4. In your `Project` `build.gradle` include the Jitpack repoistory:
+   4. In your `Project` `build.gradle` include the Jitpack repository:
       ```groovy
       maven {
         url 'https://www.jitpack.io'
       }
       ```
   5. Sync gradle.
-  6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme](https://github.com/Mopinion-com/mopinion-sdk-android), step 4 for more info. 
+  6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info. 
     
 
 ### iOS
@@ -74,7 +74,7 @@ Install the Mopinion SDK for iOS to make it an available resource for the Flutte
 	  <string>TEXT_FOR_END_USER</string>
    ```
 10. Using `VSCode`, in the folder `ios`, open the file `Podfile` and set the iOS Deployment Target to 11.0 or above.
-   Uncomment or add platform :ios, '11.0' to the podfile.
+   Uncomment or add platform :ios, '11.0' to the `Podfile`.
    ```
    # Uncomment this line to define a global platform for your project
     platform :ios, '11.0'
@@ -182,7 +182,7 @@ When a key data from the Metadata `Map<String, String>` provided to the SDK want
 This will remove the key `name` from the Metadata `Map` provided.
 
 #### Deleting all Metadata
-When all Metadata wants to be deleted, it's even simplier, just call 
+When all Metadata wants to be deleted, it's even simpler, just call 
 
 ```dart
 MopinionFlutterIntegrationPlugin.removeAllMetaData();
