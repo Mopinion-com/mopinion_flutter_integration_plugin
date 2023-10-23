@@ -10,3 +10,8 @@
 
 ## 0.0.3
 * Readme improved.
+
+## 0.0.4
+* Loading State optimized for Flutter.
+* Code formatted.
+* Fixed typos in readme.

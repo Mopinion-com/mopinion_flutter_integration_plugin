@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 
-
 import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
 
 void main() {
@@ -35,9 +34,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String _state = "no state";
-
 
   @override
   void initState() {
@@ -47,16 +44,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> initialize() async {
     try {
-       MopinionFlutterIntegrationPlugin.initSdk("zdF2CDO4NZ523sDqdzDDgzKaMb7zbsdzIuQPxUBk", true);
-       events();
+      MopinionFlutterIntegrationPlugin.initSdk(
+          "YOUR_DEPLOYMENT_ID", true);
+      events();
     } on PlatformException {
       print("error");
-    } 
+    }
   }
 
   Future<void> _launchEvent(String eventName) async {
     setState(() {
-      
       MopinionFlutterIntegrationPlugin.event(eventName);
     });
   }
@@ -81,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("test"),
@@ -102,8 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _launchEvent("bug1");
-          
+          _launchEvent("EVENT_NAME");
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
