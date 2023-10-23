@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _launchEvent("bug1");
+          _launchEvent("EVENT_NAME");
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
