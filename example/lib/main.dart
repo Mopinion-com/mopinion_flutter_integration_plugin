@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initialize() async {
     try {
       MopinionFlutterIntegrationPlugin.initSdk(
-          "zdF2CDO4NZ523sDqdzDDgzKaMb7zbsdzIuQPxUBk", true);
+          YOUR_DEPLOYMENT_ID, true);
       events();
     } on PlatformException {
       print("error");
