@@ -95,7 +95,7 @@ import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration
 ### Initialise the SDK
 Initialise the SDK by calling:
 ```dart
-MopinionFlutterIntegrationPlugin.initSdk("YOUR_KEY", true);
+MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
 ```
 The parameter `log` which is the `boolean` after the key, allows to activate the logging in the SDK.
 It's recommended to initialise the SDK the earliest possible, an example of where to initialise the SDK:
@@ -109,7 +109,7 @@ It's recommended to initialise the SDK the earliest possible, an example of wher
 
   Future<void> initialize() async {
     try {
-       MopinionFlutterIntegrationPlugin.initSdk(YOUR_KEY, true);
+       MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
     } on PlatformException {
       print("error");
     } 
@@ -119,10 +119,10 @@ It's recommended to initialise the SDK the earliest possible, an example of wher
 ### Calling events
 In order to show your forms, call the function :
 ```dart
-MopinionFlutterIntegrationPlugin.event(EVENT_NAME);
+MopinionFlutterIntegrationPlugin.event("EVENT_NAME");
 ```
 
-The `MopinionFlutterIntegrationPlugin.event(EVENT_NAME)` function will also stream an Form State to show in which state the form is. To be able to listen to that callback you can call the function `MopinionFlutterIntegrationPlugin.eventsData()` which returns an `Stream`. Example of usage:
+The `MopinionFlutterIntegrationPlugin.event("EVENT_NAME")` function will also stream an Form State to show in which state the form is. To be able to listen to that callback you can call the function `MopinionFlutterIntegrationPlugin.eventsData()` which returns an `Stream`. Example of usage:
 
 ```dart
     Stream stream;
