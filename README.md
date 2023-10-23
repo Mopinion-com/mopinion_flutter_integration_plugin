@@ -140,7 +140,8 @@ The `MopinionFlutterIntegrationPlugin.event("EVENT_NAME")` function will also st
 
 The Form State callback will be a `String`, and these are the possible Form States:
 
-* Loading
+* Loading ¹
+* NotLoading ¹
 * FormOpened
 * FormSent
 * FormCanceled
@@ -152,6 +153,8 @@ More information about the Form States can be found in each readme of the Native
 
 [iOS: 2.4.2 Callback variants of the event method](https://github.com/Mopinion-com/mopinion-sdk-ios#242-callback-variants-of-the-event-method)
 [Android: Implementing Form State callbacks](https://github.com/Mopinion-com/mopinion-sdk-android#implementing-formstate-callbacks)
+
+¹ These form states are only available in the Android SDK by the moment.
 
 ### Adding Metadata
 
