@@ -4,6 +4,7 @@ package com.mopinion.mopinion_flutter_integration_plugin
 import android.app.Activity
 import android.util.Log
 import com.mopinion.mopinion_android_sdk.ui.mopinion.Mopinion
+import com.mopinion.mopinion_android_sdk.ui.states.FormState
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.CHANNEL
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.DEPLOYMENT_KEY
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.EVENT_CHANNEL_NAME
@@ -60,9 +61,19 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
       MopinionActions.TriggerEvent -> {
         val eventName = call.argument(FIRST_ARGUMENT) as String? ?: return
         mopinion = Mopinion(activity as FlutterFragmentActivity, activity as FlutterFragmentActivity)
-        mopinion.event(eventName) {
-          Log.d("FlutterFragmentActivity", it::class.java.simpleName)
-          eventSink?.success(it::class.java.simpleName)
+        mopinion.event(eventName) { formState ->
+          if (formState is FormState.Loading) {
+            if (formState.isLoading) {
+              Log.d("FlutterFragmentActivity", "Loading")
+              eventSink?.success("Loading")
+            } else {
+              Log.d("FlutterFragmentActivity", "NotLoading")
+              eventSink?.success("NotLoading")
+            }
+          } else {
+            Log.d("FlutterFragmentActivity", formState::class.java.simpleName)
+            eventSink?.success(formState::class.java.simpleName)
+          }
         }
       }
       MopinionActions.AddMetaData -> {
