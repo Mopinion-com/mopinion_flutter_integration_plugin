@@ -15,3 +15,6 @@
 * Loading State optimized for Flutter.
 * Code formatted.
 * Fixed typos in readme.
+
+## 1.0.0
+* First stable version.
