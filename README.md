@@ -25,16 +25,12 @@ dependencies:
 ### Android
 
    1. Open the Android project with Android Studio.
-   2. Make sure that your `MainActivity.kt` extends `FlutterFragmentActivity` and the `FlutterEngine` is registered as the following:
+   2. Make sure that your `MainActivity.kt` extends `FlutterFragmentActivity`.
       ```kotlin
       import io.flutter.embedding.android.FlutterFragmentActivity
-      import io.flutter.embedding.engine.FlutterEngine
-      import io.flutter.plugins.GeneratedPluginRegistrant
 
       class MainActivity: FlutterFragmentActivity() {
-        override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-          GeneratedPluginRegistrant.registerWith(flutterEngine)
-        }
+        // Your code...
       }
       ```
    3. Make sure the min sdk is 21 in your `app` `build.gradle`:
@@ -49,8 +45,8 @@ dependencies:
         url 'https://www.jitpack.io'
       }
       ```
-  5. Sync gradle.
-  6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info. 
+  1. Sync gradle.
+  2. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info. 
     
 
 ### iOS
