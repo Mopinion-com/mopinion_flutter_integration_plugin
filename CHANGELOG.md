@@ -18,3 +18,7 @@
 
 ## 1.0.0
 * First stable version.
+
+## 1.0.1
+* Android Native SDK updated to [v1.0.19](https://github.com/Mopinion-com/mopinion-sdk-android)
+* Readme improved.
