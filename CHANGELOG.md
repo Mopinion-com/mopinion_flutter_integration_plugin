@@ -22,3 +22,7 @@
 ## 1.0.1
 * Android Native SDK updated to [v1.0.19](https://github.com/Mopinion-com/mopinion-sdk-android)
 * Readme improved.
+
+## 1.0.2
+* Improvement of the readme description.
+* Added links to the Native repositories (Android and iOS).
