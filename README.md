@@ -3,8 +3,8 @@
 This Flutter Integration SDK contains code to help you use our Android and/or iOS Native SDKs from Flutter.
 
 ## Native SDKs readme's
-[Android Native SDK](https://github.com/Mopinion-com/mopinion-sdk-android)
-[iOS Native SDK](https://github.com/Mopinion-com/mopinion-sdk-ios-swiftpm)
+- [Android Native SDK](https://github.com/Mopinion-com/mopinion-sdk-android)
+- [iOS Native SDK](https://github.com/Mopinion-com/mopinion-sdk-ios-swiftpm)
 
 
 ## Installation
