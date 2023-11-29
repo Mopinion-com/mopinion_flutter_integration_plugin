@@ -18,7 +18,9 @@ class MopinionFlutterIntegrationPlugin {
       platform.invokeMethod<String>(
           eventAction, <String, dynamic>{"argument1": eventName});
 
-  static Stream eventsData() => events.receiveBroadcastStream();
+  static Stream<MopinionFormState> eventsData() => events
+      .receiveBroadcastStream()
+      .map((event) => (event as String).toMopinionFormState());
 
   static Future<void> data(Map<String, String> map) async {
     for (final entry in map.entries) {
@@ -32,4 +34,41 @@ class MopinionFlutterIntegrationPlugin {
 
   static Future<void> removeAllMetaData() =>
       platform.invokeMethod(removeAllMetaDataAction);
+}
+
+extension on String {
+  MopinionFormState toMopinionFormState() {
+    switch (this) {
+      case "Loading":
+        return MopinionFormState.loading;
+      case "NotLoading":
+        return MopinionFormState.notLoading;
+      case "FormOpened":
+        return MopinionFormState.formOpened;
+      case "FormSent":
+        return MopinionFormState.formSent;
+      case "FormCanceled":
+        return MopinionFormState.formCanceled;
+      case "FormClosed":
+        return MopinionFormState.formClosed;
+      case "Error":
+        return MopinionFormState.error;
+      case "HasNotBeenShown":
+        return MopinionFormState.hasNotBeenShown;
+      default:
+        return MopinionFormState.unknown;
+    }
+  }
+}
+
+enum MopinionFormState {
+  loading,
+  notLoading,
+  formOpened,
+  formSent,
+  formCanceled,
+  formClosed,
+  error,
+  hasNotBeenShown,
+  unknown,
 }
