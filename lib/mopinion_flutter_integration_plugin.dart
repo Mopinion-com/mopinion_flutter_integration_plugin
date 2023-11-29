@@ -10,33 +10,26 @@ class MopinionFlutterIntegrationPlugin {
   static const removeMetaDataAction = "remove_meta_data";
   static const removeAllMetaDataAction = "remove_all_meta_data";
 
-  static Future<void> initSdk(String deploymentKey, bool log) async {
-    await platform.invokeMethod(initSdkAction,
-        <String, dynamic>{"deployment_key": deploymentKey, "log": log});
-  }
+  static Future<void> initSdk(String deploymentKey, bool log) =>
+      platform.invokeMethod(initSdkAction,
+          <String, dynamic>{"deployment_key": deploymentKey, "log": log});
 
-  static Future<String> event(String eventName) async {
-    return await platform
-        .invokeMethod(eventAction, <String, dynamic>{"argument1": eventName});
-  }
+  static Future<String?> event(String eventName) =>
+      platform.invokeMethod<String>(
+          eventAction, <String, dynamic>{"argument1": eventName});
 
-  static Future<Stream> eventsData() async {
-    Stream stream;
-    stream = events.receiveBroadcastStream();
-    return stream;
-  }
+  static Stream eventsData() => events.receiveBroadcastStream();
 
   static Future<void> data(Map<String, String> map) async {
-    map.forEach((key, value) {
-      platform.invokeMethod(addMetaDataAction, {"key": key, "value": value});
-    });
+    for (final entry in map.entries) {
+      await platform.invokeMethod(addMetaDataAction,
+          <String, dynamic>{"key": entry.key, "value": entry.value});
+    }
   }
 
-  static Future<void> removeMetaData(String key) async {
-    platform.invokeMethod(removeMetaDataAction, {"key": key});
-  }
+  static Future<void> removeMetaData(String key) =>
+      platform.invokeMethod(removeMetaDataAction, {"key": key});
 
-  static Future<void> removeAllMetaData() async {
-    platform.invokeMethod(removeAllMetaDataAction);
-  }
+  static Future<void> removeAllMetaData() =>
+      platform.invokeMethod(removeAllMetaDataAction);
 }

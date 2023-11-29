@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
 
 void main() {
@@ -44,8 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> initialize() async {
     try {
-      MopinionFlutterIntegrationPlugin.initSdk(
-          "YOUR_DEPLOYMENT_ID", true);
+      MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
       events();
     } on PlatformException {
       print("error");
@@ -65,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> events() async {
     Stream stream;
     try {
-      stream = await MopinionFlutterIntegrationPlugin.eventsData();
+      stream = MopinionFlutterIntegrationPlugin.eventsData();
       stream.listen(_setTextEventName, onError: _onError);
     } on PlatformException {
       print("Failed to get events stream.");
@@ -80,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("test"),
+        title: const Text("test"),
       ),
       body: Center(
         child: Column(
@@ -91,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               _state,
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
