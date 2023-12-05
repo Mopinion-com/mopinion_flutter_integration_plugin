@@ -1,5 +1,5 @@
 import 'package:mopinion_flutter_integration_plugin/src/mopinion_form_state.dart';
-import 'package:mopinion_flutter_integration_plugin/src/mopinon_platform.dart';
+import 'package:mopinion_flutter_integration_plugin/src/mopinion_platform.dart';
 
 class MopinionFlutterIntegrationPlugin {
   static const _platform = MopinionPlatform();

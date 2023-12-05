@@ -26,3 +26,11 @@
 ## 1.0.2
 * Improvement of the readme description.
 * Added links to the Native repositories (Android and iOS).
+
+## 2.0.0
+* Fixed issue with running on iOS. Swift Package Manager is not needed anymore.
+* Introduced `MopinionFormState` enum as type for the event stream.
+* Added correct typing to all methods in the plugin and removed unnecessary ones.
+* Improved error handling.
+* Improved overall documentation
+* Updated README
