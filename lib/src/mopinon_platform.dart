@@ -15,11 +15,13 @@ class MopinionPlatform {
 
   Future<void> initSdk(
     String deploymentKey, {
-    bool enableLog = false,
+    bool enableLogging = false,
   }) {
     try {
-      return _platform.invokeMethod(_initSdkAction,
-          <String, dynamic>{"deployment_key": deploymentKey, "log": enableLog});
+      return _platform.invokeMethod(_initSdkAction, <String, dynamic>{
+        "deployment_key": deploymentKey,
+        "log": enableLogging
+      });
     } on PlatformException catch (error, stackTrace) {
       throw Exception(
           'Initializing SDK failed: ${error.message}, stackTrace: $stackTrace');

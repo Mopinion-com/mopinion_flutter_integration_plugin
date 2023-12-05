@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
 
 void main() {
@@ -11,7 +11,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,88 +18,73 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _state = "no state";
+  var _state = MopinionFormState.hasNotBeenShown;
+  late final StreamSubscription<MopinionFormState> _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    initialize();
+    _initialize();
   }
 
-  Future<void> initialize() async {
+  @override
+  void dispose() {
+    _streamSubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initialize() async {
     try {
-      MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
-      events();
-    } on PlatformException {
-      print("error");
+      MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_KEY",
+          enableLogging: true);
+      _streamSubscription = MopinionFlutterIntegrationPlugin.eventsData()
+          .listen(_setTextEventName);
+    } catch (error) {
+      log(error.toString());
     }
   }
 
   Future<void> _launchEvent(String eventName) async {
-    setState(() {
-      MopinionFlutterIntegrationPlugin.event(eventName);
-    });
-  }
-
-  void _setTextEventName(event) {
-    setState(() => _state = event);
-  }
-
-  Future<void> events() async {
-    Stream stream;
     try {
-      stream = MopinionFlutterIntegrationPlugin.eventsData();
-      stream.listen(_setTextEventName, onError: _onError);
-    } on PlatformException {
-      print("Failed to get events stream.");
+      await MopinionFlutterIntegrationPlugin.event(eventName);
+    } catch (error) {
+      log(error.toString());
     }
   }
 
-  static void _onError(error) {
-    print("Error info: $error");
+  void _setTextEventName(MopinionFormState event) {
+    setState(() => _state = event);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("test"),
+        title: const Text("Example app Mopinion Flutter Integration Plugin"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Counter',
-            ),
-            Text(
-              _state,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: Text(
+          _state.toString(),
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _launchEvent("EVENT_NAME");
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: () => _launchEvent("EVENT_NAME"),
+        tooltip: 'Launch form',
+        child: const Icon(Icons.rocket_launch),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

@@ -5,8 +5,8 @@ class MopinionFlutterIntegrationPlugin {
   static const _platform = MopinionPlatform();
 
   /// Initializes the SDK with [deploymentKey]. Optionally, you can enable logging.
-  static Future<void> initSdk(String deploymentKey, {bool enableLog = false}) =>
-      _platform.initSdk(deploymentKey, enableLog: enableLog);
+  static Future<void> initSdk(String deploymentKey, {bool enableLogging = false}) =>
+      _platform.initSdk(deploymentKey, enableLogging: enableLogging);
 
   /// Launches event with [eventName].
   static Future<void> event(String eventName) => _platform.event(eventName);
