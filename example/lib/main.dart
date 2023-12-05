@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_KEY",
           enableLogging: true);
       _streamSubscription = MopinionFlutterIntegrationPlugin.eventsData()
-          .listen(_setTextEventName);
+          .listen(_setFormStateText);
     } catch (error) {
       log(error.toString());
     }
@@ -65,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _setTextEventName(MopinionFormState event) {
-    setState(() => _state = event);
+  void _setFormStateText(MopinionFormState state) {
+    setState(() => _state = state);
   }
 
   @override
