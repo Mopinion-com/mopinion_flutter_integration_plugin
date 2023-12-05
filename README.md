@@ -122,7 +122,7 @@ The `MopinionFlutterIntegrationPlugin.event("EVENT_NAME")` function will also st
     }
 ```
 
-The Form State callback will be a enum called `MopinionFormState`, and these are the possible Form States:
+The Form State callback will be an enum called `MopinionFormState`, and these are the possible Form States:
 
 - Loading ¹
 - NotLoading ¹
