@@ -54,8 +54,8 @@ dependencies:
      url 'https://www.jitpack.io'
    }
    ```
-1. Sync gradle.
-1. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info.
+5. Sync gradle.
+6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info.
 
 ### iOS
 
