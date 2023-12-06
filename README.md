@@ -1,13 +1,14 @@
-# Mopinion Native SDK for Flutter 
+# Mopinion Native SDK for Flutter
 
 Use the Mopinion Flutter Plugin to integrate our native iOS and Android SDKs in your Flutter applications.
 
 ## Native SDKs readme's
+
 - [Android Native SDK](https://github.com/Mopinion-com/mopinion-sdk-android)
 - [iOS Native SDK](https://github.com/Mopinion-com/mopinion-sdk-ios-swiftpm)
 
-
 ## Installation
+
 1. Edit the `pubspec.yml` in your `flutter` directory to define the Mopinion Plugin Dependency:
 
 ```
@@ -28,60 +29,43 @@ dependencies:
 
 ### Android
 
-   1. Open the Android project with Android Studio.
-   2. Make sure that your `MainActivity.kt` extends `FlutterFragmentActivity`.
-      ```kotlin
-      import io.flutter.embedding.android.FlutterFragmentActivity
+1.  Open the Android project with Android Studio.
+2.  Make sure that your `MainActivity.kt` extends `FlutterFragmentActivity`.
 
-      class MainActivity: FlutterFragmentActivity() {
-        // Your code...
-      }
-      ```
-   3. Make sure the min sdk is 21 in your `app` `build.gradle`:
-   ```groovy
-     defaultConfig {
-        minSdkVersion 21
+    ```kotlin
+    import io.flutter.embedding.android.FlutterFragmentActivity
+
+    class MainActivity: FlutterFragmentActivity() {
+      // Your code...
     }
+    ```
+
+3.  Make sure the min sdk is 21 in your `app` `build.gradle`:
+
+```groovy
+  defaultConfig {
+     minSdkVersion 21
+ }
+```
+
+4. In your `Project` `build.gradle` include the Jitpack repository:
+   ```groovy
+   maven {
+     url 'https://www.jitpack.io'
+   }
    ```
-   4. In your `Project` `build.gradle` include the Jitpack repository:
-      ```groovy
-      maven {
-        url 'https://www.jitpack.io'
-      }
-      ```
-  1. Sync gradle.
-  2. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info. 
-    
+5. Sync gradle.
+6. Make sure the app theme extends from a MaterialComponent theme. Please check the [Android Native SDK readme step 4](https://github.com/Mopinion-com/mopinion-sdk-android#step-4) for more info.
 
 ### iOS
+
 Install the Mopinion SDK for iOS to make it an available resource for the Flutter plugin.
 
 1. Open in the terminal the `ios` folder and run `pod install` command.
-2. Open your iOS project `Runner.xcworkspace` with Xcode.
-3. Click on the `Pods` project.
-4. Click on `File` option from XCode and click on `Add Package dependencies...`.
-5. Search for the Mopinion iOS SDK:
-   `https://github.com/Mopinion-com/mopinion-sdk-ios-swiftpm.git`
-   It will appear with the name of: `mopinion-sdk-ios-swiftpm`.
-6. Remember to add it to the `Pods` project.
-7. When the dialog of `Choose Package Products for mopinion-sdk-ios-swiftpm` is opened, select the `Add to Target` dropdown and from the options select the plugin target: `mopinion_flutter_integration_plugin`.
-8. Add the package.
-9. Add `Privacy - Camera Usage Description` and `Privacy - Photo Library Usage Description` into file `info.plist`.
-   ```xml
-      <key>NSCameraUsageDescription</key>
-	  <string>TEXT_FOR_END_USER</string>
-	  <key>NSPhotoLibraryUsageDescription</key>
-	  <string>TEXT_FOR_END_USER</string>
-   ```
-10. Using `VSCode`, in the folder `ios`, open the file `Podfile` and set the iOS Deployment Target to 11.0 or above.
-   Uncomment or add platform :ios, '11.0' to the `Podfile`.
-   ```
-   # Uncomment this line to define a global platform for your project
-    platform :ios, '11.0'
-   ```
-11. Finally run the project from XCode.
+2. Set the iOS Deployment Target to 11.0 or above.
 
 ## Flutter implementation
+
 In order to use Mopinion SDK for Flutter and start collecting your valuable user's feedback please follow the following steps:
 
 ### Import the plugin
@@ -93,10 +77,13 @@ import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration
 ```
 
 ### Initialise the SDK
+
 Initialise the SDK by calling:
+
 ```dart
-MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
+MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", enableLogging: true);
 ```
+
 The parameter `log` which is the `boolean` after the key, allows to activate the logging in the SDK.
 It's recommended to initialise the SDK the earliest possible, an example of where to initialise the SDK:
 
@@ -109,15 +96,17 @@ It's recommended to initialise the SDK the earliest possible, an example of wher
 
   Future<void> initialize() async {
     try {
-       MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
-    } on PlatformException {
-      print("error");
-    } 
+      await MopinionFlutterIntegrationPlugin.initSdk("YOUR_DEPLOYMENT_ID", true);
+    } catch (error) {
+      print(error.toString());
+    }
   }
 ```
 
 ### Calling events
+
 In order to show your forms, call the function :
+
 ```dart
 MopinionFlutterIntegrationPlugin.event("EVENT_NAME");
 ```
@@ -125,29 +114,24 @@ MopinionFlutterIntegrationPlugin.event("EVENT_NAME");
 The `MopinionFlutterIntegrationPlugin.event("EVENT_NAME")` function will also stream an Form State to show in which state the form is. To be able to listen to that callback you can call the function `MopinionFlutterIntegrationPlugin.eventsData()` which returns an `Stream`. Example of usage:
 
 ```dart
-    Stream stream;
-    try {
-      stream = await MopinionFlutterIntegrationPlugin.eventsData();
-      stream.listen(_setTextEventName, onError: _onError);
-    } on PlatformException {
-      print("Failed to get events stream.");
-    }
+    MopinionFlutterIntegrationPlugin.eventsData().listen(_setFormStateStatus)
 
-    void _setTextEventName(event) {
-    setState(() => _yourState_ = event);
-  }
+
+    void _setFormStateStatus(MopinionFormState state) {
+      setState(() => _state = state);
+    }
 ```
 
-The Form State callback will be a `String`, and these are the possible Form States:
+The Form State callback will be an enum called `MopinionFormState`, and these are the possible Form States:
 
-* Loading ¹
-* NotLoading ¹
-* FormOpened
-* FormSent
-* FormCanceled
-* FormClosed
-* Error
-* HasNotBeenShown
+- Loading ¹
+- NotLoading ¹
+- FormOpened
+- FormSent
+- FormCanceled
+- FormClosed
+- Error
+- HasNotBeenShown
 
 More information about the Form States can be found in each readme of the Native SDKs:
 
@@ -161,7 +145,7 @@ More information about the Form States can be found in each readme of the Native
 Adding Metadata in the Mopinion SDK is easy, it's achieved by calling the function
 
 ```dart
-  MopinionFlutterIntegrationPlugin.data(Map);
+  await MopinionFlutterIntegrationPlugin.data(map);
 ```
 
 This function will receive a `Map<String, String>` variable which will contain the metadata you want to set in your events. Example of usage:
@@ -171,25 +155,26 @@ This function will receive a `Map<String, String>` variable which will contain t
         "age": "29",
         "name": "Manuel"
       };
-  MopinionFlutterIntegrationPlugin.data(map);
-  MopinionFlutterIntegrationPlugin.event(yourEvent);
+  await MopinionFlutterIntegrationPlugin.data(map);
+  await MopinionFlutterIntegrationPlugin.event(yourEvent);
 ```
 
 #### Deleting Metadata by key
+
 When a key data from the Metadata `Map<String, String>` provided to the SDK wants to be deleted then we should just pass the `key` value as the following:
 
 ```dart
-  MopinionFlutterIntegrationPlugin.removeMetaData("name");
+MopinionFlutterIntegrationPlugin.removeMetaData("name");
 ```
 
 This will remove the key `name` from the Metadata `Map` provided.
 
 #### Deleting all Metadata
-When all Metadata wants to be deleted, it's even simpler, just call 
+
+When all Metadata wants to be deleted, it's even simpler, just call
 
 ```dart
 MopinionFlutterIntegrationPlugin.removeAllMetaData();
 ```
+
 And all Metadata will be deleted.
-
-
