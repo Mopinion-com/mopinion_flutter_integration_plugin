@@ -9,6 +9,7 @@ object MopinionFlutterBridgeConstants {
     const val ADD_META_DATA = "add_meta_data"
     const val KEY = "key"
     const val DEPLOYMENT_KEY = "deployment_key"
+    const val VERSION = "version"
     const val LOG = "log"
     const val VALUE = "value"
     const val REMOVE_META_DATA = "remove_meta_data"
