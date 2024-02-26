@@ -1,3 +1,7 @@
+## 2.0.1
+* The SDK has been adapted to receive the Flutter Plugin Version when initialized from a Flutter project.
+* Mopinion SDK updated to latest version [1.0.24](https://github.com/Mopinion-com/mopinion-sdk-android)
+
 ## 2.0.0
 * Fixed issue with running on iOS. Swift Package Manager is not needed anymore.
 * Introduced `MopinionFormState` enum as type for the event stream.

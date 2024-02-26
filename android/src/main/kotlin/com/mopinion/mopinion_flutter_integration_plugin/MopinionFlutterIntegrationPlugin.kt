@@ -2,6 +2,7 @@ package com.mopinion.mopinion_flutter_integration_plugin
 
 
 import android.app.Activity
+import android.os.Build.VERSION
 import android.util.Log
 import com.mopinion.mopinion_android_sdk.ui.mopinion.Mopinion
 import com.mopinion.mopinion_android_sdk.ui.states.FormState
@@ -12,6 +13,7 @@ import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeCon
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.KEY
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.LOG
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.VALUE
+import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.VERSION
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -51,10 +53,12 @@ class MopinionFlutterIntegrationPlugin: FlutterPlugin, MethodCallHandler, Activi
     when(MopinionActions.map[call.method]) {
       MopinionActions.InitialiseSDK -> {
         val deploymentKey = call.argument(DEPLOYMENT_KEY) as String? ?: return
+        val version = call.argument(VERSION) as String? ?: return
         val isLogActive = call.argument(LOG) as Boolean? ?: return
         Mopinion.initialiseFromFlutter(
           application = activity.application,
           deploymentKey = deploymentKey,
+          pluginVersion = version,
           log = isLogActive
         )
       }
