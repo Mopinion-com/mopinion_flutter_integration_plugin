@@ -1,3 +1,10 @@
+## 2.1.1
+* Mopinion Android SDK updated to latest version [1.0.25](https://github.com/Mopinion-com/mopinion-sdk-android)
+
+## 2.1.0
+* Fixed issues with Android where the `Future` of the methods did not complete at all.
+* Improved error messages on Android.
+
 ## 2.0.1
 * The SDK has been adapted to receive the Flutter Plugin Version when initialized from a Flutter project.
 * Mopinion SDK updated to latest version [1.0.24](https://github.com/Mopinion-com/mopinion-sdk-android)
