@@ -1,3 +1,9 @@
+## 2.1.3
+* Mopinion Android SDK updated to latest version [1.0.27](https://github.com/Mopinion-com/mopinion-sdk-android)
+
+## 2.1.2
+* Mopinion Android SDK updated to latest version [1.0.26](https://github.com/Mopinion-com/mopinion-sdk-android)
+
 ## 2.1.1
 * Mopinion Android SDK updated to latest version [1.0.25](https://github.com/Mopinion-com/mopinion-sdk-android)
 

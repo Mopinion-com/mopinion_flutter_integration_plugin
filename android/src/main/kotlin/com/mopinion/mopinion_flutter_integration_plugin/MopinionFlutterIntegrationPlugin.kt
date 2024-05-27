@@ -85,7 +85,6 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                     val eventName = call.argument(FIRST_ARGUMENT) as String?
                         ?: return result.error("Event name has not been provided", null, null)
                     mopinion = Mopinion(
-                        activity as FlutterFragmentActivity,
                         activity as FlutterFragmentActivity
                     )
                     if (!::mopinion.isInitialized) {
