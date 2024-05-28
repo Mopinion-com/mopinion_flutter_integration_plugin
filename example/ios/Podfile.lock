@@ -4,11 +4,17 @@ PODS:
     - Flutter
   - mopinion_flutter_integration_plugin (0.0.1):
     - Flutter
+    - MopinionSDK (~> 1.1.0)
+  - MopinionSDK (1.1.2)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - mopinion_flutter_integration_plugin (from `.symlinks/plugins/mopinion_flutter_integration_plugin/ios`)
+
+SPEC REPOS:
+  trunk:
+    - MopinionSDK
 
 EXTERNAL SOURCES:
   Flutter:
@@ -21,8 +27,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: 13825b8a9334a850581300559b8839134b124670
-  mopinion_flutter_integration_plugin: 6d486d7d97aad3d6074dba3a6c335eddda34d274
+  mopinion_flutter_integration_plugin: 0d44b2522b98c4eefd08bdd33440633a0ca7744d
+  MopinionSDK: 3e9113342828d49bf4cfee464f644f2307db2fd3
 
-PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
+PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2
