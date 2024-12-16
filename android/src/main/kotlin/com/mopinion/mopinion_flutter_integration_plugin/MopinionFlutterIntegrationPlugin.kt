@@ -4,8 +4,8 @@ package com.mopinion.mopinion_flutter_integration_plugin
 import android.app.Activity
 import android.os.Build.VERSION
 import android.util.Log
-import com.mopinion.mopinion_android_sdk.ui.mopinion.Mopinion
-import com.mopinion.mopinion_android_sdk.ui.states.FormState
+import com.mopinion.mopinion_android_sdk.Mopinion
+import com.mopinion.mopinion_android_sdk.viewstate.FormState
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.CHANNEL
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.DEPLOYMENT_KEY
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.EVENT_CHANNEL_NAME
@@ -72,7 +72,7 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                             null,
                             null
                         )
-                    Mopinion.initialiseFromFlutter(
+                    Mopinion.initialise(
                         application = activity.application,
                         deploymentKey = deploymentKey,
                         pluginVersion = version,
