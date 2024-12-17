@@ -6,6 +6,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -18,6 +19,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -68,5 +70,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.Mopinion-com:native-android-sdk:1.0.27'
+    implementation 'com.github.Mopinion-com.native-android-sdk:mopinion-sdk:2.0.0'
 }
