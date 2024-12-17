@@ -1,3 +1,7 @@
+## 3.0.0
+* Mopinion Android SDK updated to latest version [2.0.0](https://github.com/Mopinion-com/mopinion-sdk-android)
+* Using UIViewController instead of FlutterViewController for iOS.
+
 ## 2.1.3
 * Mopinion Android SDK updated to latest version [1.0.27](https://github.com/Mopinion-com/mopinion-sdk-android)
 
