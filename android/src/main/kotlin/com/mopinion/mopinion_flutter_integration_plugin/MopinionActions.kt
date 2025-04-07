@@ -7,11 +7,11 @@ import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeCon
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.TRIGGER_EVENT
 
 sealed interface MopinionActions {
-    object InitialiseSDK: MopinionActions
-    object TriggerEvent: MopinionActions
-    object AddMetaData: MopinionActions
-    object RemoveMetaData: MopinionActions
-    object RemoveAllMetaData: MopinionActions
+    data object InitialiseSDK: MopinionActions
+    data object TriggerEvent: MopinionActions
+    data object AddMetaData: MopinionActions
+    data object RemoveMetaData: MopinionActions
+    data object RemoveAllMetaData: MopinionActions
     companion object {
         val map = hashMapOf(
             INITIALISE_SDK to InitialiseSDK,

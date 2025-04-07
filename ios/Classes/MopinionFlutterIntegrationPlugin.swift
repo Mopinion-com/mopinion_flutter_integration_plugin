@@ -7,7 +7,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
     private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
     
     // statics for the Flutter message communication
-    private weak static var controller : FlutterViewController?
+    private weak static var controller : UIViewController?
     
     private var eventSink: FlutterEventSink? = nil
     
@@ -30,7 +30,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController else {
+        guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? UIViewController else {
             MopinionFlutterIntegrationPlugin.controller = nil
             return
         }
@@ -71,7 +71,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         result(nil)
     }
 
-    private func triggerEvent(controller: FlutterViewController, call: FlutterMethodCall, result: FlutterResult) {
+    private func triggerEvent(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
         guard let eventName = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.FIRST_ARGUMENT.rawValue] as? String else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.DEPLOYMENT_KEY.rawValue)", details: "Expected event name as String"))
             return
@@ -98,7 +98,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         result(nil)
     }
 
-    private func addMetaData(controller: FlutterViewController, call: FlutterMethodCall, result: FlutterResult) {
+    private func addMetaData(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
         guard let key = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.KEY.rawValue] as? String else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.KEY.rawValue)", details: "Expected key value for map of metadata."))
             return
@@ -110,7 +110,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         MopinionSDK.data(key, value)
     }
 
-    private func removeMetadataWithKey(controller: FlutterViewController, call: FlutterMethodCall, result: FlutterResult) {
+    private func removeMetadataWithKey(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
         guard let key = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.KEY.rawValue] as? String else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.KEY.rawValue)", details: "Expected key value for map of metadata."))
             return

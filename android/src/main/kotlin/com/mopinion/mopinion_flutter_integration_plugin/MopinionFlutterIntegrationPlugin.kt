@@ -2,10 +2,9 @@ package com.mopinion.mopinion_flutter_integration_plugin
 
 
 import android.app.Activity
-import android.os.Build.VERSION
 import android.util.Log
-import com.mopinion.mopinion_android_sdk.ui.mopinion.Mopinion
-import com.mopinion.mopinion_android_sdk.ui.states.FormState
+import com.mopinion.mopinion_android_sdk.Mopinion
+import com.mopinion.mopinion_android_sdk.viewstate.FormState
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.CHANNEL
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.DEPLOYMENT_KEY
 import com.mopinion.mopinion_flutter_integration_plugin.MopinionFlutterBridgeConstants.EVENT_CHANNEL_NAME
@@ -72,7 +71,7 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                             null,
                             null
                         )
-                    Mopinion.initialiseFromFlutter(
+                    Mopinion.initialise(
                         application = activity.application,
                         deploymentKey = deploymentKey,
                         pluginVersion = version,
@@ -84,9 +83,17 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                 MopinionActions.TriggerEvent -> {
                     val eventName = call.argument(FIRST_ARGUMENT) as String?
                         ?: return result.error("Event name has not been provided", null, null)
+                    val flutterActivity = activity as? FlutterFragmentActivity
+                    if (flutterActivity == null) {
+                        result.error(
+                            "Invalid Activity type",
+                            "Mopinion plugin requires a FlutterFragmentActivity. Current activity is ${activity::class.java.simpleName}",
+                            null
+                        )
+                        return
+                    }
                     mopinion = Mopinion(
-                        activity as FlutterFragmentActivity,
-                        activity as FlutterFragmentActivity
+                        flutterActivity
                     )
                     if (!::mopinion.isInitialized) {
                         return result.error("Mopinion SDK is not initialized", null, null)
