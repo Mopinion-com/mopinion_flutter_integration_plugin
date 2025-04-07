@@ -31,7 +31,7 @@ android {
         namespace 'com.mopinion.mopinion_flutter_integration_plugin'
     }
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -70,5 +70,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.github.Mopinion-com.native-android-sdk:mopinion-sdk:2.0.0'
+    implementation 'com.github.Mopinion-com.native-android-sdk:mopinion-sdk:2.0.3'
 }
