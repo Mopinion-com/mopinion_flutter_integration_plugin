@@ -1,3 +1,6 @@
+## 3.0.2
+* Fixed issue where `metadata` calls were never resolving.
+
 ## 3.0.1
 * Mopinion Android SDK updated to latest version [2.0.3](https://github.com/Mopinion-com/mopinion-sdk-android)
 * Safe cast of FLutterFragmentActivity issue fixed.

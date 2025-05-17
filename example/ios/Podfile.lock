@@ -26,8 +26,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: 13825b8a9334a850581300559b8839134b124670
-  mopinion_flutter_integration_plugin: 0d44b2522b98c4eefd08bdd33440633a0ca7744d
+  integration_test: 2d03ab552da9a1f408709a6acf3d7ca4cb3cb307
+  mopinion_flutter_integration_plugin: efaddbe2491a3b71eb8f336db98996757850c558
   MopinionSDK: 3e9113342828d49bf4cfee464f644f2307db2fd3
 
 PODFILE CHECKSUM: 7be2f5f74864d463a8ad433546ed1de7e0f29aef

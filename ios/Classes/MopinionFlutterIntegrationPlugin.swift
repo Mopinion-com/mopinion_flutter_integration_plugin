@@ -48,7 +48,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
                 self.removeMetadataWithKey(controller: controller, call: call, result: result)
                 break
             case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
-                removeAllMetadata()
+                removeAllMetadata(result: result)
                 break
             default:
                 break
@@ -108,6 +108,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
             return
         }
         MopinionSDK.data(key, value)
+        result(nil)
     }
 
     private func removeMetadataWithKey(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
@@ -116,10 +117,12 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
             return
         }
         MopinionSDK.removeData(forKey: key)
+        result(nil)
     }
 
-    private func removeAllMetadata() {
+    private func removeAllMetadata(result: FlutterResult) {
         MopinionSDK.removeData()
+        result(nil)
     }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
