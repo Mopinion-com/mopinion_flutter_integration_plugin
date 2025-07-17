@@ -1,3 +1,6 @@
+## 3.0.3
+* Mopinion Android SDK updated to latest version [2.0.5-rc1](https://github.com/Mopinion-com/mopinion-sdk-android)
+
 ## 3.0.2
 * Fixed issue where `metadata` calls were never resolving.
 
