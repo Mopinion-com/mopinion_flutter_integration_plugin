@@ -1,3 +1,10 @@
+## 3.0.6
+* Mopinion Android SDK updated to latest stable version [2.0.7](https://github.com/Mopinion-com/mopinion-sdk-android)
+
+## 3.0.5
+* Mopinion Android SDK updated to latest stable version [2.0.6](https://github.com/Mopinion-com/mopinion-sdk-android)
+* Fixes bug where adding metadata caused crashes.
+
 ## 3.0.4
 * Mopinion Android SDK updated to latest stable version [2.0.5](https://github.com/Mopinion-com/mopinion-sdk-android)
 
