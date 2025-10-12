@@ -77,12 +77,6 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                         pluginVersion = version,
                         log = isLogActive
                     )
-                    return result.success(null)
-                }
-
-                MopinionActions.TriggerEvent -> {
-                    val eventName = call.argument(FIRST_ARGUMENT) as String?
-                        ?: return result.error("Event name has not been provided", null, null)
                     val flutterActivity = activity as? FlutterFragmentActivity
                     if (flutterActivity == null) {
                         result.error(
@@ -95,9 +89,12 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                     mopinion = Mopinion(
                         flutterActivity
                     )
-                    if (!::mopinion.isInitialized) {
-                        return result.error("Mopinion SDK is not initialized", null, null)
-                    }
+                    return result.success(null)
+                }
+
+                MopinionActions.TriggerEvent -> {
+                    val eventName = call.argument(FIRST_ARGUMENT) as String?
+                        ?: return result.error("Event name has not been provided", null, null)
                     mopinion.event(eventName) { formState ->
                         if (formState is FormState.Loading) {
                             if (formState.isLoading) {
@@ -116,18 +113,6 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                 }
 
                 MopinionActions.AddMetaData -> {
-                    if (!::mopinion.isInitialized) {
-                        val flutterActivity = activity as? FlutterFragmentActivity
-                        if (flutterActivity == null) {
-                            result.error(
-                                "Invalid Activity type",
-                                "Mopinion plugin requires a FlutterFragmentActivity. Current activity is ${activity::class.java.simpleName}",
-                                null
-                            )
-                            return
-                        }
-                        mopinion = Mopinion(flutterActivity)
-                    }
                     val key = call.argument(KEY) as String?
                         ?: return result.error("Key has not been provided", null, null)
                     val value = call.argument(VALUE) as String?
@@ -137,23 +122,15 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                 }
 
                 MopinionActions.RemoveAllMetaData -> {
-                    if (::mopinion.isInitialized) {
-                        mopinion.removeData()
-                        result.success(null);
-                    } else {
-                        return result.error("Mopinion SDK is not initialized", null, null)
-                    }
+                    mopinion.removeData()
+                    result.success(null)
                 }
 
                 MopinionActions.RemoveMetaData -> {
-                    if (::mopinion.isInitialized) {
-                        val key = call.argument(KEY) as String?
-                            ?: return result.error("Key has not been provided", null, null)
-                        mopinion.removeData(key)
-                        result.success(null);
-                    } else {
-                        return result.error("Mopinion SDK is not initialized", null, null)
-                    }
+                    val key = call.argument(KEY) as String?
+                        ?: return result.error("Key has not been provided", null, null)
+                    mopinion.removeData(key)
+                    result.success(null);
                 }
 
                 null -> {
