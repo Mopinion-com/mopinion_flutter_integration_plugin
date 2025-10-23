@@ -1,3 +1,6 @@
+## 3.0.7
+* Fixes issues where adding and removing metadata was not working.
+
 ## 3.0.6
 * Mopinion Android SDK updated to latest stable version [2.0.7](https://github.com/Mopinion-com/mopinion-sdk-android)
 

@@ -1,6 +1,6 @@
 name: mopinion_flutter_integration_plugin
 description: Plugin to integrate Mopinion Native Mobile SDKs into Flutter projects.
-version: 3.0.6
+version: 3.0.7
 homepage: https://mopinion.com/mobile-sdk-downloads/
 repository: https://github.com/Mopinion-com/mopinion_flutter_integration_plugin
 
