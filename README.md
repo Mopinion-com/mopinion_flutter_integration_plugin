@@ -62,7 +62,7 @@ dependencies:
 Install the Mopinion SDK for iOS to make it an available resource for the Flutter plugin.
 
 1. Open in the terminal the `ios` folder and run `pod install` command.
-2. Set the iOS Deployment Target to 11.0 or above.
+2. Set the iOS Deployment Target to 12.0 or above.
 
 ## Flutter implementation
 
