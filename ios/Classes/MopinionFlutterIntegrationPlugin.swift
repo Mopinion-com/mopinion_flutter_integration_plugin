@@ -7,34 +7,63 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
     private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
     
     // statics for the Flutter message communication
-    private weak static var controller : UIViewController?
-    
+
+    weak var registrar: FlutterPluginRegistrar?
     private var eventSink: FlutterEventSink? = nil
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
-        let instance = MopinionFlutterIntegrationPlugin()
+        let instance = MopinionFlutterIntegrationPlugin(registrar: registrar)
         registrar.addMethodCallDelegate(instance, channel: channel)
         let eventChannel = FlutterEventChannel(name: "MopinionFlutterBridge/native/events", binaryMessenger: registrar.messenger())
         eventChannel.setStreamHandler(instance)
     }
     
     private let invalidArgError = MopinionFlutterIntegrationPluginError(code:"invalidArgs", message: "Invalid arguments.")
-        
+
+    // get the "active" uiviewcontroller via flutter or via the os or nil if there isn't one.
+    func getViewController() -> UIViewController? {
+        if let controller = self.registrar?.viewController {
+            // flutter single-view method
+            return controller
+        } else if #available(iOS 13.0, *) {
+            // otherwise try it directly via the OS scenes
+            let activeScenes = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene}).filter({ $0.activationState == .foregroundActive })
+            if !activeScenes.isEmpty {
+                if #available(iOS 15.0, *),
+                   let controller = activeScenes.first?.keyWindow?.rootViewController {
+                    // from iOS 15, get a key window directly from the scene
+                    return controller
+                } else if let controller = activeScenes.first?.windows.first(where: \.isKeyWindow)?.rootViewController {
+                    // iOS 13-14, must find a key window amongst the windows in the scene
+                    return controller
+                }
+            }
+        }
+
+        if let controller = UIApplication.shared.delegate?.window??.rootViewController {
+            // fallback for pre iOS 27/13 apps that only rely on app life cycle
+            return controller
+        }
+
+        return nil  // no UIViewController, can also happen when it is not yet displaying a UIView.
+    }
+
+    private init(registrar: FlutterPluginRegistrar) {
+        self.registrar = registrar
+    }
+
     // MARK: singleton
-    private override init() {}  // singleton
-    
-    static let shared = MopinionFlutterIntegrationPlugin()
+//    static let shared = MopinionFlutterIntegrationPlugin()
     
     // MARK: Flutter method handler
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? UIViewController else {
-            MopinionFlutterIntegrationPlugin.controller = nil
+        guard let controller = self.getViewController() else {
             return
         }
-                    switch call.method {
+        switch call.method {
             case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
                 initializeSdk(call: call, result: result)
                 break
@@ -52,9 +81,8 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
                 break
             default:
                 break
-            }
-            }
-    
+        }
+    }
 
     // MARK: implementation of the Flutter methods
 
