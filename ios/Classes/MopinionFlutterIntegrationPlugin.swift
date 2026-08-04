@@ -4,18 +4,19 @@ import MopinionSDK
 
 public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
-    private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
-    
     // statics for the Flutter message communication
 
     weak var registrar: FlutterPluginRegistrar?
     private var eventSink: FlutterEventSink? = nil
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
+        let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+        let EVENT_CHANNEL_NAME = "MopinionFlutterBridge/native/events"  // flutter event channel
+
+        let channel = FlutterMethodChannel(name: METHOD_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         let instance = MopinionFlutterIntegrationPlugin(registrar: registrar)
         registrar.addMethodCallDelegate(instance, channel: channel)
-        let eventChannel = FlutterEventChannel(name: "MopinionFlutterBridge/native/events", binaryMessenger: registrar.messenger())
+        let eventChannel = FlutterEventChannel(name: EVENT_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         eventChannel.setStreamHandler(instance)
     }
     
@@ -53,9 +54,6 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         self.registrar = registrar
     }
 
-    // MARK: singleton
-//    static let shared = MopinionFlutterIntegrationPlugin()
-    
     // MARK: Flutter method handler
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
