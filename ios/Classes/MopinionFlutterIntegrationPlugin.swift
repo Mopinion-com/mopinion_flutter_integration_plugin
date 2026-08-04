@@ -4,37 +4,64 @@ import MopinionSDK
 
 public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     
-    private let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
-    
     // statics for the Flutter message communication
-    private weak static var controller : UIViewController?
-    
+
+    weak var registrar: FlutterPluginRegistrar?
     private var eventSink: FlutterEventSink? = nil
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "MopinionFlutterBridge/native", binaryMessenger: registrar.messenger())
-        let instance = MopinionFlutterIntegrationPlugin()
+        let METHOD_CHANNEL_NAME = "MopinionFlutterBridge/native"    // flutter communication channel
+        let EVENT_CHANNEL_NAME = "MopinionFlutterBridge/native/events"  // flutter event channel
+
+        let channel = FlutterMethodChannel(name: METHOD_CHANNEL_NAME, binaryMessenger: registrar.messenger())
+        let instance = MopinionFlutterIntegrationPlugin(registrar: registrar)
         registrar.addMethodCallDelegate(instance, channel: channel)
-        let eventChannel = FlutterEventChannel(name: "MopinionFlutterBridge/native/events", binaryMessenger: registrar.messenger())
+        let eventChannel = FlutterEventChannel(name: EVENT_CHANNEL_NAME, binaryMessenger: registrar.messenger())
         eventChannel.setStreamHandler(instance)
     }
     
     private let invalidArgError = MopinionFlutterIntegrationPluginError(code:"invalidArgs", message: "Invalid arguments.")
-        
-    // MARK: singleton
-    private override init() {}  // singleton
-    
-    static let shared = MopinionFlutterIntegrationPlugin()
-    
+
+    // get the "active" uiviewcontroller via flutter or via the os or nil if there isn't one.
+    func getViewController() -> UIViewController? {
+        if let controller = self.registrar?.viewController {
+            // flutter single-view method
+            return controller
+        } else if #available(iOS 13.0, *) {
+            // otherwise try it directly via the OS scenes
+            let activeScenes = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene}).filter({ $0.activationState == .foregroundActive })
+            if !activeScenes.isEmpty {
+                if #available(iOS 15.0, *),
+                   let controller = activeScenes.first?.keyWindow?.rootViewController {
+                    // from iOS 15, get a key window directly from the scene
+                    return controller
+                } else if let controller = activeScenes.first?.windows.first(where: \.isKeyWindow)?.rootViewController {
+                    // iOS 13-14, must find a key window amongst the windows in the scene
+                    return controller
+                }
+            }
+        }
+
+        if let controller = UIApplication.shared.delegate?.window??.rootViewController {
+            // fallback for pre iOS 27/13 apps that only rely on app life cycle
+            return controller
+        }
+
+        return nil  // no UIViewController, can also happen when it is not yet displaying a UIView.
+    }
+
+    private init(registrar: FlutterPluginRegistrar) {
+        self.registrar = registrar
+    }
+
     // MARK: Flutter method handler
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let controller = UIApplication.shared.delegate?.window??.rootViewController as? UIViewController else {
-            MopinionFlutterIntegrationPlugin.controller = nil
+        guard let controller = self.getViewController() else {
             return
         }
-                    switch call.method {
+        switch call.method {
             case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
                 initializeSdk(call: call, result: result)
                 break
@@ -52,9 +79,8 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
                 break
             default:
                 break
-            }
-            }
-    
+        }
+    }
 
     // MARK: implementation of the Flutter methods
 
@@ -73,7 +99,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
 
     private func triggerEvent(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
         guard let eventName = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.FIRST_ARGUMENT.rawValue] as? String else {
-            result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.DEPLOYMENT_KEY.rawValue)", details: "Expected event name as String"))
+            result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.FIRST_ARGUMENT.rawValue)", details: "Expected event name as String"))
             return
         }
         MopinionSDK.event(controller, eventName, onCallbackEvent: { mopinionEvent,response in
