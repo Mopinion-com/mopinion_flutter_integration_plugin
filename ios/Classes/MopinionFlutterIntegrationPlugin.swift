@@ -101,7 +101,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
 
     private func triggerEvent(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
         guard let eventName = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.FIRST_ARGUMENT.rawValue] as? String else {
-            result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.DEPLOYMENT_KEY.rawValue)", details: "Expected event name as String"))
+            result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.FIRST_ARGUMENT.rawValue)", details: "Expected event name as String"))
             return
         }
         MopinionSDK.event(controller, eventName, onCallbackEvent: { mopinionEvent,response in
