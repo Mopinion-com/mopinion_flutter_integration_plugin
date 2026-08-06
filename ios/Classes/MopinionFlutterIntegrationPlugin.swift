@@ -89,9 +89,22 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.DEPLOYMENT_KEY.rawValue)", details: "Expected deployment key as String"))
             return
         }
+        guard let flutterThemeMode = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.FLUTTER_THEME_MODE.rawValue] as? String else {
+            result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.FLUTTER_THEME_MODE.rawValue)", details: "Expected dark, light or system as String."))
+            return
+        }
         guard let enableLogging = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.LOG.rawValue] as? Bool else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.LOG.rawValue)", details: "Expected log to be bool (true or false)"))
             return
+        }
+        if flutterThemeMode.compare("dark", options: .caseInsensitive) == .orderedSame {
+            MopinionSDK.configuration.setColorScheme(.dark)
+        } else
+        if flutterThemeMode.compare("light", options: .caseInsensitive) == .orderedSame {
+            MopinionSDK.configuration.setColorScheme(.light)
+        } else
+        if flutterThemeMode.compare("system", options: .caseInsensitive) == .orderedSame {
+            MopinionSDK.configuration.setColorScheme(.auto) // in iOS, auto is the default.
         }
         MopinionSDK.load(deploymentKey, enableLogging)
         result(nil)
@@ -182,6 +195,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
     private enum MopinionFlutterArgument: String {
         case DEPLOYMENT_KEY = "deployment_key"
         case FIRST_ARGUMENT = "argument1"
+        case FLUTTER_THEME_MODE = "flutter_theme_mode"
         case KEY = "key"
         case LOG = "log"
         case VALUE = "value"
