@@ -15,7 +15,7 @@ A new Flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'MopinionSDK', '~> 1.2.1'
+  s.dependency 'MopinionSDK', '~> 1.3.1'
   s.platform = :ios, '12.0'
 
   # Flutter.framework does not contain a i386 slice.
