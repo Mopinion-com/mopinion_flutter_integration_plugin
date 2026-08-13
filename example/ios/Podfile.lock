@@ -1,28 +1,15 @@
 PODS:
   - Flutter (1.0.0)
-  - mopinion_flutter_integration_plugin (3.0.7):
-    - Flutter
-    - MopinionSDK (~> 1.2.1)
-  - MopinionSDK (1.2.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - mopinion_flutter_integration_plugin (from `.symlinks/plugins/mopinion_flutter_integration_plugin/ios`)
-
-SPEC REPOS:
-  trunk:
-    - MopinionSDK
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  mopinion_flutter_integration_plugin:
-    :path: ".symlinks/plugins/mopinion_flutter_integration_plugin/ios"
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  mopinion_flutter_integration_plugin: 6dd21d161e82042a404483b0b2e7ea19eb805018
-  MopinionSDK: 733fdd6f6a76b5181e28f0c8d1ae567653cc2bf7
 
 PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
 
