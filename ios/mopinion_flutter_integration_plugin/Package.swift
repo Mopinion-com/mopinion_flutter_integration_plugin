@@ -19,7 +19,8 @@ let package = Package(
         .target(
             name: "mopinion_flutter_integration_plugin",
             dependencies: [
-                .product(name: "FlutterFramework", package: "FlutterFramework")
+                .product(name: "FlutterFramework", package: "FlutterFramework"),
+                .product(name: "MopinionSDK", package: "mopinion-sdk-ios-swiftpm")
             ],
             resources: [
                 // If your plugin requires a privacy manifest, for example if it uses any required
