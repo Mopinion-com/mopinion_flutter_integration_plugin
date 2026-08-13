@@ -58,27 +58,27 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
     
     // Actual message handler. Call this for instance from your (Flutter)AppDelegate
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        guard let controller = self.getViewController() else {
-            return
-        }
         switch call.method {
-            case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
-                initializeSdk(call: call, result: result)
-                break
-            case MopinionFlutterAction.TRIGGER_EVENT.rawValue:
-                triggerEvent(controller:controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.ADD_META_DATA.rawValue:
-                addMetaData(controller: controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.REMOVE_META_DATA.rawValue:
-                self.removeMetadataWithKey(controller: controller, call: call, result: result)
-                break
-            case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
-                removeAllMetadata(result: result)
-                break
-            default:
-                break
+        case MopinionFlutterAction.INIT_WITH_DEPLOYMENT.rawValue :
+            initializeSdk(call: call, result: result)
+            break
+        case MopinionFlutterAction.TRIGGER_EVENT.rawValue:
+            guard let controller = self.getViewController() else {
+                return
+            }
+            triggerEvent(controller:controller, call: call, result: result)
+            break
+        case MopinionFlutterAction.ADD_META_DATA.rawValue:
+            addMetaData(call: call, result: result)
+            break
+        case MopinionFlutterAction.REMOVE_META_DATA.rawValue:
+            removeMetadataWithKey(call: call, result: result)
+            break
+        case MopinionFlutterAction.REMOVE_ALL_META_DATA.rawValue:
+            removeAllMetadata(result: result)
+            break
+        default:
+            break
         }
     }
 
@@ -137,7 +137,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         result(nil)
     }
 
-    private func addMetaData(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
+    private func addMetaData(call: FlutterMethodCall, result: FlutterResult) {
         guard let key = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.KEY.rawValue] as? String else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.KEY.rawValue)", details: "Expected key value for map of metadata."))
             return
@@ -150,7 +150,7 @@ public class MopinionFlutterIntegrationPlugin: NSObject, FlutterPlugin, FlutterS
         result(nil)
     }
 
-    private func removeMetadataWithKey(controller: UIViewController, call: FlutterMethodCall, result: FlutterResult) {
+    private func removeMetadataWithKey(call: FlutterMethodCall, result: FlutterResult) {
         guard let key = (call.arguments as? Dictionary<String, AnyObject>)?[MopinionFlutterArgument.KEY.rawValue] as? String else {
             result(FlutterError(code: invalidArgError.code, message: "\(invalidArgError.message) \(MopinionFlutterArgument.KEY.rawValue)", details: "Expected key value for map of metadata."))
             return
