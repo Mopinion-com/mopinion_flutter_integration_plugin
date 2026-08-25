@@ -67,7 +67,7 @@ class MopinionFlutterIntegrationPlugin : FlutterPlugin, MethodCallHandler, Activ
                         )
                     val isLogActive = call.argument(LOG) as Boolean?
                         ?: return result.error(
-                            "Event name method argument has not been provided",
+                            "Method argument 'log' has not been provided",
                             null,
                             null
                         )
