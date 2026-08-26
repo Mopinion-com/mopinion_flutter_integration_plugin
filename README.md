@@ -42,13 +42,14 @@ dependencies:
 
 3.  Make sure the min sdk is 21 in your `app` `build.gradle`:
 
-```groovy
+	```groovy
   defaultConfig {
      minSdkVersion 21
- }
-```
+  }
+	```
 
 4. In your `Project` `build.gradle` include the Jitpack repository:
+
    ```groovy
    maven {
      url 'https://www.jitpack.io'
@@ -62,7 +63,7 @@ dependencies:
 Install the Mopinion SDK for iOS to make it an available resource for the Flutter plugin.
 
 1. Open in the terminal the `ios` folder and run `pod install` command.
-2. Set the iOS Deployment Target to 12.0 or above.
+2. Set the iOS Deployment Target to 15.0 or above for Xcode 27. Earlier Xcode versions also support iOS 12.0 or 13.0 and newer.
 
 ## Flutter implementation
 
@@ -133,10 +134,10 @@ The Form State callback will be an enum called `MopinionFormState`, and these ar
 - Error
 - HasNotBeenShown
 
-More information about the Form States can be found in each readme of the Native SDKs:
+See the readme of the native Android SDK for more information on the Form States, or the iOS SDK on its callbacks:
 
-[iOS: 2.4.2 Callback variants of the event method](https://github.com/Mopinion-com/mopinion-sdk-ios#242-callback-variants-of-the-event-method)
-[Android: Implementing Form State callbacks](https://github.com/Mopinion-com/mopinion-sdk-android#implementing-formstate-callbacks)
+- [Android: Implementing Form State callbacks](https://github.com/Mopinion-com/mopinion-sdk-android#implementing-formstate-callbacks)
+- [iOS: Callback mode](https://github.com/Mopinion-com/mopinion-sdk-ios#callback-mode)
 
 ¹ These form states are only available in the Android SDK by the moment.
 

@@ -1,3 +1,12 @@
+## 3.1.0
+* Flutter project updated for 3.44.8.
+* Mopinion Android SDK updated to 2.0.9.
+* Android project updated for Android Studio Quail 3.
+* Mopinion iOS SDK updated to 1.3.1.
+* iOS Project prepared for Xcode 27 support.
+* Added iOS support for swift package manager.
+* Implemented iOS scene life cycle support, required for iOS 27.
+
 ## 3.0.7
 * Fixes issues where adding and removing metadata was not working.
 
