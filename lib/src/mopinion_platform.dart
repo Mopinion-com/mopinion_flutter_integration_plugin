@@ -15,7 +15,7 @@ class MopinionPlatform {
   static const _removeMetaDataAction = "remove_meta_data";
   static const _removeAllMetaDataAction = "remove_all_meta_data";
 
-  final version = "2.0.0";
+  final version = "3.1.0";
 
   Future<void> initSdk(
     String deploymentKey, {
