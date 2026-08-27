@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:mopinion_flutter_integration_plugin/src/mopinion_form_state.dart';
 import 'package:mopinion_flutter_integration_plugin/mopinion_flutter_integration_plugin.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 
 class MopinionPlatform {
   const MopinionPlatform();
@@ -14,17 +15,21 @@ class MopinionPlatform {
   static const _removeMetaDataAction = "remove_meta_data";
   static const _removeAllMetaDataAction = "remove_all_meta_data";
 
-  final version = "2.0.0";
+  final version = "3.1.0";
 
   Future<void> initSdk(
     String deploymentKey, {
+    ThemeMode themeMode = ThemeMode.system,
     bool enableLogging = false,
   }) {
     try {
+      String themeModeAsString = themeMode.name;
+
       return _platform.invokeMethod(_initSdkAction, <String, dynamic>{
         "deployment_key": deploymentKey,
         "version": version,
-        "log": enableLogging
+        "flutter_theme_mode": themeModeAsString,
+        "log": enableLogging,
       });
     } on PlatformException catch (error, stackTrace) {
       throw Exception(

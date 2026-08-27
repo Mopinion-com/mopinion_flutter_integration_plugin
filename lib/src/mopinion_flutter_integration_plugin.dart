@@ -1,15 +1,17 @@
 import 'package:mopinion_flutter_integration_plugin/src/mopinion_form_state.dart';
 import 'package:mopinion_flutter_integration_plugin/src/mopinion_platform.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 
 class MopinionFlutterIntegrationPlugin {
   static const _platform = MopinionPlatform();
 
-  /// Initializes the SDK with [deploymentKey]. Optionally, you can enable logging.
+  /// Initializes the SDK with [deploymentKey]. Optionally, you can set ThemeMode and enable logging.
   static Future<void> initSdk(
     String deploymentKey, {
+    ThemeMode themeMode = ThemeMode.system,
     bool enableLogging = false,
   }) =>
-      _platform.initSdk(deploymentKey, enableLogging: enableLogging);
+      _platform.initSdk(deploymentKey, themeMode: themeMode, enableLogging: enableLogging);
 
   /// Launches event with [eventName].
   static Future<void> event(String eventName) => _platform.event(eventName);
